@@ -1,9 +1,9 @@
 // storage controller
 
 // Item Controller
-const ItemCTRL = (function () {
+const ItemCTRL = (function() {
   // Item Constructor
-  const Item = function (id, name, calories) {
+  const Item = function(id, name, calories) {
     this.id = id
     this.name = name
     this.calories = calories
@@ -32,20 +32,47 @@ const ItemCTRL = (function () {
     totalCalories: 0
   }
   return {
-    logData: function () {
+    getItems: function() {
+      return data.items
+    },
+
+    logData: function() {
       return data
     }
   }
 })()
 // UI Controller
-const UICtrl = (function () {
-  return {}
+const UICtrl = (function() {
+  const UISelectors = {
+    itemList: '#item-list'
+  }
+  return {
+    populateItemList: function(items) {
+      let html = ''
+      items.forEach(function(item) {
+        html += `<li class="collection-item" id="item-${item.id}">
+        <strong>${item.name}: </strong> <em>${item.calories} Calories</em>
+        <a href="#" class="secondary-content">
+          <i class="edit-itme fa fa-pencil"></i>
+        </a>
+      </li>`
+      })
+
+      // insert list items
+      document.querySelector(UISelectors.itemList).innerHTML = html
+    }
+  }
 })()
 // App Controller
-const App = (function (ItemCTRL, UICtrl) {
+const App = (function(ItemCTRL, UICtrl) {
   return {
-    init: function () {
+    init: function() {
       console.log('initializing app')
+      // fetch items from data structure
+      const items = ItemCTRL.getItems()
+
+      // populate list items
+      UICtrl.populateItemList(items)
     }
   }
 })(ItemCTRL, UICtrl)
